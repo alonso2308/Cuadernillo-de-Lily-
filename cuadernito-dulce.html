@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuadernito de Lily 🧁 Postres caseros</title>
+<meta name="description" content="Postres de Lily: carlotas, arroz con leche, gelatinas y cheesecake sin hornear, en porciones individuales, hechos a mano con mucho cariño.">
+
+<!--
+  ============================================================
+  PERSONALIZA AQUÍ
+  1. Nombre del negocio: busca "Cuadernito de Lily" y cámbialo
+     donde quieras por el nombre que prefieran.
+  2. Número de WhatsApp: busca WHATSAPP_NUMBER en el <script>
+     al final del archivo y pon el número real.
+  3. Postres y precios: edita las tarjetas dentro de
+     <section class="page menu" id="menu">.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#FFF8EC;
+    --paper-alt:#FFF1DC;
+    --ink:#4A3728;
+    --ink-soft:#8A7361;
+    --fresa:#E85D75;
+    --fresa-dark:#C8455B;
+    --menta:#6FBF9B;
+    --menta-dark:#4E9C7C;
+    --mantequilla:#F2B33D;
+    --tape-blue:#8EC6E6;
+    --tape-pink:#F2A6BE;
+    --tape-yellow:#F5D77E;
+    --shadow:rgba(74,55,40,0.18);
+    --radius:16px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Quicksand', sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    margin:0;
+    color:var(--ink);
+  }
+  h2{font-size:clamp(2.2rem,6vw,3rem); line-height:1;}
+  p{margin:0;}
+  a{color:inherit;}
+  ul{margin:0;padding:0;list-style:none;}
+
+  /* ---------- spiral binding strip ---------- */
+  .binding{
+    height:26px;
+    background:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding-left:14px;
+    overflow:hidden;
+  }
+  .ring{
+    flex:0 0 auto;
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2.5px solid var(--ink);
+  }
+
+  /* ---------- generic page block ---------- */
+  .page{
+    max-width:760px;
+    margin:0 auto;
+    padding:64px 24px 24px;
+    position:relative;
+  }
+  .page.alt{background:var(--paper-alt);}
+  .page-wide{max-width:920px;}
+
+  .torn{
+    width:100%;
+    height:26px;
+    background:var(--paper-alt);
+    clip-path:polygon(0% 0%,4% 100%,8% 0%,12% 100%,16% 0%,20% 100%,24% 0%,28% 100%,32% 0%,36% 100%,40% 0%,44% 100%,48% 0%,52% 100%,56% 0%,60% 100%,64% 0%,68% 100%,72% 0%,76% 100%,80% 0%,84% 100%,88% 0%,92% 100%,96% 0%,100% 100%);
+  }
+  .torn.flip{transform:scaleY(-1); background:var(--paper);}
+
+  /* ---------- tape labels ---------- */
+  .tape{
+    display:inline-block;
+    font-family:'Patrick Hand', cursive;
+    font-size:1.05rem;
+    padding:7px 24px;
+    box-shadow:0 3px 6px var(--shadow);
+    position:relative;
+    top:14px;
+    z-index:2;
+    opacity:0.92;
+  }
+  .tape-blue{background:var(--tape-blue); transform:rotate(-3deg);}
+  .tape-pink{background:var(--tape-pink); transform:rotate(2.5deg);}
+  .tape-yellow{background:var(--tape-yellow); transform:rotate(-2deg);}
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:18px 24px 70px;
+    background:var(--paper);
+    overflow:hidden;
+  }
+  .nav{
+    max-width:920px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 0 40px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .brand{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:1.7rem;
+  }
+  .nav-links{display:flex; gap:22px; font-family:'Patrick Hand', cursive; font-size:1.05rem;}
+  .nav-links a{text-decoration:none; border-bottom:2px dashed transparent;}
+  .nav-links a:hover{border-bottom-color:var(--fresa);}
+
+  .hero-content{
+    max-width:640px;
+    margin:0 auto;
+    text-align:center;
+  }
+  .eyebrow{
+    font-family:'Patrick Hand', cursive;
+    color:var(--ink-soft);
+    letter-spacing:1px;
+    margin-bottom:6px;
+  }
+  .hero h1{
+    font-size:clamp(3.2rem,13vw,5.6rem);
+    line-height:0.92;
+  }
+  .tagline{
+    margin-top:18px;
+    font-size:1.2rem;
+    color:var(--ink-soft);
+  }
+  .menu-preview{
+    margin-top:14px;
+    font-family:'Patrick Hand', cursive;
+    font-size:1.05rem;
+  }
+  .hero-actions{
+    margin-top:32px;
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .doodle{position:absolute; color:var(--ink-soft); opacity:0.5;}
+  .doodle-1{width:58px; top:60px; left:6%; transform:rotate(-12deg);}
+  .doodle-2{width:46px; top:160px; right:7%; transform:rotate(10deg);}
+  .doodle-3{width:42px; top:24px; right:16%; transform:rotate(-6deg);}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-block;
+    padding:13px 28px;
+    border-radius:30px;
+    font-family:'Patrick Hand', cursive;
+    font-size:1.08rem;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{background:var(--fresa); color:#fff; box-shadow:0 4px 0 var(--fresa-dark);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-primary:active{transform:translateY(2px); box-shadow:0 2px 0 var(--fresa-dark);}
+  .btn-whatsapp{background:#25D366; color:#fff; box-shadow:0 4px 0 #1DA851;}
+  .btn-whatsapp:hover{transform:translateY(-2px);}
+  .btn-whatsapp:active{transform:translateY(2px); box-shadow:0 2px 0 #1DA851;}
+
+  /* ---------- story ---------- */
+  .story-card{
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:0 6px 18px var(--shadow);
+    padding:30px 28px;
+    margin-top:30px;
+    font-size:1.1rem;
+  }
+
+  /* ---------- menu / recipe cards ---------- */
+  .recipe-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:30px;
+    margin-top:44px;
+  }
+  .recipe-card{
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:0 6px 16px var(--shadow);
+    padding:26px 22px;
+    transition:transform .2s ease;
+  }
+  .recipe-card:nth-child(4n+1){transform:rotate(-1.4deg);}
+  .recipe-card:nth-child(4n+2){transform:rotate(1.1deg);}
+  .recipe-card:nth-child(4n+3){transform:rotate(-0.8deg);}
+  .recipe-card:nth-child(4n+4){transform:rotate(1.6deg);}
+  .recipe-card:hover{transform:rotate(0deg) translateY(-5px);}
+
+  .recipe-icon{width:64px; height:64px; margin-bottom:10px;}
+  .recipe-card h3{
+    font-family:'Caveat', cursive;
+    font-size:1.7rem;
+    margin:4px 0 6px;
+  }
+  .recipe-card p{color:var(--ink-soft); font-size:0.98rem;}
+  .recipe-note{
+    display:block;
+    margin-top:12px;
+    font-family:'Patrick Hand', cursive;
+    font-size:0.92rem;
+    color:var(--ink);
+  }
+
+  .menu-subtitle{
+    margin-top:10px;
+    color:var(--ink-soft);
+    font-size:1.05rem;
+  }
+
+  /* ---------- pedir ---------- */
+  .order-grid{
+    display:grid;
+    grid-template-columns:1fr 1.4fr;
+    gap:34px;
+    margin-top:40px;
+  }
+  .order-quick, .order-form-wrap{
+    background:var(--paper);
+    border-radius:var(--radius);
+    box-shadow:0 6px 16px var(--shadow);
+    padding:28px 24px;
+  }
+  .order-quick h3, .order-form-wrap h3{
+    font-family:'Caveat', cursive;
+    font-size:1.6rem;
+    margin-bottom:10px;
+  }
+  .order-quick p{color:var(--ink-soft); margin-bottom:20px;}
+
+  .order-form-wrap form label{
+    display:block;
+    margin-bottom:18px;
+    font-family:'Patrick Hand', cursive;
+    color:var(--ink-soft);
+    font-size:0.98rem;
+  }
+  .order-form-wrap input,
+  .order-form-wrap select,
+  .order-form-wrap textarea{
+    width:100%;
+    font-family:'Quicksand', sans-serif;
+    font-size:1rem;
+    color:var(--ink);
+    background:transparent;
+    border:none;
+    border-bottom:2px dashed var(--ink-soft);
+    padding:8px 2px;
+    margin-top:5px;
+  }
+  .order-form-wrap textarea{resize:vertical; min-height:60px;}
+  .order-form-wrap input:focus-visible,
+  .order-form-wrap select:focus-visible,
+  .order-form-wrap textarea:focus-visible{outline:3px solid var(--tape-blue); outline-offset:2px;}
+
+  @media (max-width:720px){
+    .order-grid{grid-template-columns:1fr;}
+  }
+
+  .qr-block{
+    margin-top:50px;
+    text-align:center;
+  }
+  .qr-label{
+    font-family:'Patrick Hand', cursive;
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+  }
+  #qrcode{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--paper);
+    padding:16px;
+    border-radius:var(--radius);
+    box-shadow:0 6px 16px var(--shadow);
+    min-height:170px;
+    min-width:170px;
+  }
+  .qr-fallback{font-family:'Patrick Hand', cursive; font-size:0.95rem; color:var(--ink-soft);}
+  .qr-hint{
+    margin-top:14px;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+  }
+
+  .adult-note{
+    margin-top:36px;
+    text-align:center;
+    font-family:'Patrick Hand', cursive;
+    color:var(--ink-soft);
+    font-size:0.95rem;
+  }
+
+  /* ---------- footer ---------- */
+  .footer{
+    text-align:center;
+    padding:50px 24px 60px;
+    font-family:'Caveat', cursive;
+    font-size:1.5rem;
+    color:var(--ink-soft);
+  }
+
+  :focus-visible{outline:3px solid var(--tape-blue); outline-offset:2px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1!important; transform:none!important; transition:none!important;}
+    *{transition:none!important; animation:none!important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="binding" aria-hidden="true"></div>
+
+<header class="hero" id="inicio">
+  <nav class="nav">
+    <span class="brand">Cuadernito de Lily 🌷</span>
+    <div class="nav-links">
+      <a href="#menu">Menú</a>
+      <a href="#pedir">Pedir</a>
+    </div>
+  </nav>
+
+  <svg class="doodle doodle-1" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="20" y="40" width="60" height="45" rx="4"/>
+    <rect x="20" y="40" width="60" height="15" rx="2"/>
+    <line x1="50" y1="40" x2="50" y2="85"/>
+    <path d="M50 40 C40 20 20 25 30 35 C35 38 45 40 50 40 Z"/>
+    <path d="M50 40 C60 20 80 25 70 35 C65 38 55 40 50 40 Z"/>
+  </svg>
+  <svg class="doodle doodle-2" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M40 30 Q35 20 40 12"/>
+    <path d="M55 30 Q60 20 55 12"/>
+    <path d="M20 50 Q20 80 50 80 Q80 80 80 50 Z"/>
+    <ellipse cx="50" cy="50" rx="30" ry="10"/>
+  </svg>
+  <svg class="doodle doodle-3" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M50 50 C50 30 40 15 50 5 C60 15 50 30 50 50 Z"/>
+    <path d="M50 50 C70 50 85 40 95 50 C85 60 70 50 50 50 Z"/>
+    <path d="M50 50 C50 70 60 85 50 95 C40 85 50 70 50 50 Z"/>
+    <path d="M50 50 C30 50 15 60 5 50 C15 40 30 50 50 50 Z"/>
+    <circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/>
+  </svg>
+
+  <div class="hero-content">
+    <p class="eyebrow">— recetario casero —</p>
+    <h1>Cuadernito<br>de Lily</h1>
+    <p class="tagline">Postres hechos a mano, receta por receta, con mucho cariño.</p>
+    <p class="menu-preview">🍰 Carlotas · 🍚 Arroz con leche · 🍮 Gelatinas · 🍫 Cheesecake · y más sorpresas</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn btn-primary">Ver el menú</a>
+      <a href="#" id="wa-quick-1" target="_blank" rel="noopener" class="btn btn-whatsapp">📲 Pedir por WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<div class="torn" aria-hidden="true"></div>
+
+<section class="page story reveal">
+  <span class="tape tape-blue">cómo empezó</span>
+  <div class="story-card">
+    <p>Todo comenzó cuando Lily empezó a regalar sus postres a los amigos del salón… ¡y les encantaron! Desde entonces no han dejado de pedir más, así que ahora, si tú también quieres probarlos, puedes hacer tu pedido por aquí. 🧡</p>
+  </div>
+</section>
+
+<div class="torn flip" aria-hidden="true"></div>
+
+<section class="page menu reveal" id="menu">
+  <span class="tape tape-pink">el menú</span>
+  <h2>¿Qué hay en el cuaderno?</h2>
+  <p class="menu-subtitle">Todo se prepara en porciones individuales, listas para regalar o disfrutar. 🧡</p>
+
+  <div class="recipe-grid">
+    <article class="recipe-card">
+      <svg class="recipe-icon" style="color:var(--fresa)" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <ellipse cx="50" cy="80" rx="32" ry="7"/>
+        <path d="M22 75 L22 46 Q22 26 50 26 Q78 26 78 46 L78 75"/>
+        <path d="M22 46 L22 75 M32 43 L32 75 M42 41 L42 75 M50 39 L50 75 M58 41 L58 75 M68 43 L68 75 M78 46 L78 75"/>
+        <ellipse cx="50" cy="26" rx="28" ry="7"/>
+        <circle cx="50" cy="23" r="4" fill="currentColor" stroke="none"/>
+      </svg>
+      <h3>Carlota</h3>
+      <p>Capas frías de galleta y crema, en sabores clásicos como limón o café.</p>
+      <span class="recipe-note">🗒️ vasito individual, con un día de anticipación</span>
+    </article>
+
+    <article class="recipe-card">
+      <svg class="recipe-icon" style="color:var(--mantequilla)" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 50 Q20 80 50 80 Q80 80 80 50 Z"/>
+        <ellipse cx="50" cy="50" rx="30" ry="10"/>
+        <circle cx="40" cy="48" r="2.5" fill="currentColor" stroke="none"/>
+        <circle cx="55" cy="50" r="2.5" fill="currentColor" stroke="none"/>
+        <circle cx="48" cy="44" r="2.5" fill="currentColor" stroke="none"/>
+        <path d="M40 30 Q35 20 40 12"/>
+        <path d="M55 30 Q60 20 55 12"/>
+      </svg>
+      <h3>Arroz con leche</h3>
+      <p>Cremosito, con un toque de canela. Se sirve fresquecito o tibio, como prefieras.</p>
+      <span class="recipe-note">🗒️ disponible en vasitos individuales</span>
+    </article>
+
+    <article class="recipe-card">
+      <svg class="recipe-icon" style="color:var(--tape-pink)" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M28 38 Q22 60 32 75 Q40 86 50 86 Q60 86 68 75 Q78 60 72 38"/>
+        <path d="M28 38 Q35 30 40 36 Q45 28 50 36 Q55 28 60 36 Q65 30 72 38"/>
+        <rect x="40" y="50" width="7" height="7" fill="currentColor" stroke="none"/>
+        <rect x="53" y="56" width="7" height="7" fill="currentColor" stroke="none"/>
+        <rect x="45" y="66" width="7" height="7" fill="currentColor" stroke="none"/>
+      </svg>
+      <h3>Gelatina de mosaico</h3>
+      <p>Coloridas, fresquecitas y perfectas para un antojo de tarde o para compartir.</p>
+      <span class="recipe-note">🗒️ vasito individual</span>
+    </article>
+
+    <article class="recipe-card">
+      <svg class="recipe-icon" style="color:var(--menta)" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M32 35 L68 35 L64 88 L36 88 Z"/>
+        <line x1="34" y1="68" x2="66" y2="68"/>
+        <path d="M36 35 Q50 28 64 35"/>
+        <circle cx="50" cy="28" r="4" fill="currentColor" stroke="none"/>
+      </svg>
+      <h3>Cheesecake sin hornear</h3>
+      <p>Base de galleta, relleno cremoso y un toque de fruta encima, en su propio vasito.</p>
+      <span class="recipe-note">🗒️ sabores: fresa, mango o natural</span>
+    </article>
+
+    <article class="recipe-card">
+      <svg class="recipe-icon" style="color:var(--tape-blue)" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="50" cy="50" r="8" fill="currentColor" stroke="none"/>
+        <path d="M50 20 L50 35 M50 65 L50 80 M20 50 L35 50 M65 50 L80 50 M28 28 L38 38 M62 62 L72 72 M72 28 L62 38 M38 62 L28 72"/>
+      </svg>
+      <h3>Y más sorpresas</h3>
+      <p>De vez en cuando salen recetas nuevas del cuaderno. Pregunta qué hay en temporada.</p>
+      <span class="recipe-note">🗒️ síguenos para no perderte nada</span>
+    </article>
+  </div>
+</section>
+
+<div class="torn" aria-hidden="true"></div>
+
+<section class="page pedir reveal" id="pedir">
+  <span class="tape tape-blue">haz tu pedido</span>
+  <h2>¿Cómo pedir?</h2>
+
+  <div class="order-grid">
+    <div class="order-quick">
+      <h3>Opción rápida</h3>
+      <p>Escríbenos directo por WhatsApp y platicamos los detalles de tu pedido.</p>
+      <a href="#" id="wa-quick-2" target="_blank" rel="noopener" class="btn btn-whatsapp">📲 Escribir por WhatsApp</a>
+    </div>
+
+    <div class="order-form-wrap">
+      <h3>Pedido detallado</h3>
+      <form id="order-form">
+        <label>Tu nombre
+          <input type="text" name="nombre" required>
+        </label>
+        <label>¿Qué te gustaría pedir?
+          <select name="postre">
+            <option>Carlota</option>
+            <option>Arroz con leche</option>
+            <option>Gelatina de mosaico</option>
+            <option>Cheesecake sin hornear</option>
+            <option>Otro</option>
+          </select>
+        </label>
+        <label>Cantidad o personas
+          <input type="text" name="cantidad" placeholder="ej. 4 gelatinas, 6 vasitos de cheesecake">
+        </label>
+        <label>Fecha deseada
+          <input type="date" name="fecha">
+        </label>
+        <label>Mensaje (opcional)
+          <textarea name="mensaje" placeholder="sabores, alergias, alguna idea especial..."></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary">Enviar pedido por WhatsApp</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="qr-block">
+    <p class="qr-label">o comparte este código para que pidan directo:</p>
+    <div id="qrcode"></div>
+    <p class="qr-hint">📌 imprímelo y pégalo en tus paquetes</p>
+  </div>
+
+  <p class="adult-note">Pedidos gestionados por un adulto de la familia 💌</p>
+</section>
+
+<footer class="footer">
+  Hecho con cariño por Lily, receta por receta 🧡
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // 🔧 PERSONALIZA: pon aquí el número de WhatsApp que recibirá los pedidos
+  // formato: código de país + número, sin espacios ni signo +
+  // ejemplo CDMX: "5215512345678"
+  const WHATSAPP_NUMBER = "5214428223614";
+
+  function buildWhatsAppLink(message){
+    return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+  }
+
+  const quickMessage = "¡Hola! Vi el menú de Cuadernito de Lily y me encantaría hacer un pedido 🧁";
+  document.getElementById('wa-quick-1').href = buildWhatsAppLink(quickMessage);
+  document.getElementById('wa-quick-2').href = buildWhatsAppLink(quickMessage);
+
+  document.getElementById('order-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    const data = new FormData(this);
+    const lines = [
+      "¡Hola! Quiero hacer un pedido en Cuadernito de Lily 🧁",
+      "Nombre: " + data.get('nombre'),
+      "Postre: " + data.get('postre'),
+      "Cantidad: " + (data.get('cantidad') || 'por confirmar'),
+      "Fecha deseada: " + (data.get('fecha') || 'por confirmar')
+    ];
+    if (data.get('mensaje')) lines.push("Mensaje: " + data.get('mensaje'));
+    window.open(buildWhatsAppLink(lines.join("\n")), '_blank');
+  });
+
+  // spiral binding rings
+  const bindingEl = document.querySelector('.binding');
+  const ringCount = Math.ceil(window.innerWidth / 28) + 2;
+  for (let i = 0; i < ringCount; i++){
+    const r = document.createElement('span');
+    r.className = 'ring';
+    bindingEl.appendChild(r);
+  }
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12});
+    revealEls.forEach(el => obs.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('visible'));
+  }
+
+  // QR code, points automatically at wherever this page is hosted
+  window.addEventListener('load', function(){
+    try {
+      // eslint-disable-next-line no-undef
+      new QRCode(document.getElementById('qrcode'), {
+        text: window.location.href,
+        width: 170,
+        height: 170,
+        colorDark: "#4A3728",
+        colorLight: "#FFF8EC",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch (err) {
+      document.getElementById('qrcode').innerHTML =
+        '<span class="qr-fallback">No se pudo generar el código aquí.<br>Comparte el enlace de la página directamente.</span>';
+    }
+  });
+</script>
+
+</body>
+</html>
